@@ -8,12 +8,9 @@
 library(data.table)
 library(dplyr)
 wd <- "~/cw/data-science/GettingAndCleaningData/Assignment/GettingAndCleaningData/"
-baseDir <- "UCI_HAR_Dataset/"
-trainDir <- paste0(wd, baseDir, "train/")
-testDir  <- paste0(wd, baseDir, "test/")
-mid <- "Inertial Signals/"
-trainAccDir <- paste0(trainDir, mid)
-testAccDir  <- paste0(testDir, mid)
+baseDir <- "./"
+trainDir <- wd
+testDir  <- wd
 
 setwd(wd)
 # make activity more descriptive
@@ -39,7 +36,7 @@ tbl_test <- data.table(subject_test, y_test, X_test)
 #----- merge them, sort by subject.id ------------------------------
 motion_features <- merge(tbl_train,tbl_test, all=T, sort=T)
 #--------------------------------------------
-write.csv(motion_features, "motion_features.csv")
+write.table(motion_features, "motion_features.csv", row.names=F)
 #--------------------------------------------
 # average_motion_features
 # average features by subjectid and activity
@@ -48,5 +45,5 @@ average_motion_features <- motion_features %>%
                 summarize_all(mean)               # make mean(s) at once
 avg_l <- sapply(l, function(x){paste0("avg_", x)}) %>% unlist # add avg_ to labels
 names(average_motion_features) <- c("subject.id", "activity", avg_l)
-write.csv(average_motion_features, "average_motion_features.csv")
+write.table(average_motion_features, "average_motion_features.csv", row.names=F)
 #------------------END_OF_SCRIPT------------------------------
